@@ -1,0 +1,465 @@
+{
+  "site": {
+    "name": "Sai Charan Reddy",
+    "email": "saicharanrdi@gmail.com",
+    "bookingUrl": "https://cal.com/your-handle",
+    "resumeUrl": "",
+    "location": "Hyderabad, India",
+    "locationNote": "Working with clients worldwide",
+    "available": true,
+    "availableText": "Available for new projects",
+    "socials": [
+      {
+        "label": "LinkedIn",
+        "href": "www.linkedin.com/in/sai-charan-reddy-maddur-b63b11321"
+      },
+      {
+        "label": "Behance",
+        "href": "https://www.behance.net/saicharanrdy"
+      }
+    ]
+  },
+  "hero": {
+    "label": "Product & UI/UX Designer | AI-Assisted Developer",
+    "headline": "I design products people love to use and build interactive websites people remember.",
+    "highlight": "remember",
+    "support": "Crafting intuitive products and interactive web experiences, from first sketch to final launch.",
+    "marquee": [
+      "Product Design",
+      "UI Design",
+      "UX Design",
+      "Interactive Websites",
+      "Design Systems",
+      "Prototyping",
+      "User Research",
+      "Creative Development"
+    ]
+  },
+  "about": {
+    "statement": "I'm a product designer who cares about the details, from how a product works to how it feels.",
+    "highlight": "how it feels",
+    "paragraph": "I help brands, startups, and teams turn ideas into clear, usable digital products. My work covers the full journey: understanding users, shaping the experience, designing the interface, and building interactive websites that bring it all to life. I use AI-assisted development to move from concept to live product quickly, without losing attention to craft.",
+    "portrait": "/portrait.png",
+    "services": [
+      {
+        "n": "01",
+        "title": "Product & UX Design",
+        "text": "Research, user flows, and wireframes that make complex ideas simple."
+      },
+      {
+        "n": "02",
+        "title": "UI Design",
+        "text": "Clean, consistent interfaces and design systems built to scale."
+      },
+      {
+        "n": "03",
+        "title": "Interactive Websites",
+        "text": "Responsive, motion-rich websites designed and developed end to end."
+      }
+    ],
+    "stats": [
+      {
+        "value": 1,
+        "suffix": "+",
+        "label": "Years of experience"
+      },
+      {
+        "value": 6,
+        "suffix": "+",
+        "label": "Projects delivered"
+      },
+      {
+        "value": 4,
+        "suffix": "",
+        "label": "Industries"
+      }
+    ]
+  },
+  "experience": {
+    "heading": "Where I've worked and what I've built.",
+    "roles": [
+      {
+        "from": "2025",
+        "to": "2026",
+        "title": "UI/UX Trainee",
+        "company": "KIT Skill Hub",
+        "text": "Created interfaces, design systems, and prototypes for web and mobile."
+      },
+      {
+        "from": "2026",
+        "to": "2026",
+        "title": "Visual Designer",
+        "company": "Vedya Labs Pvt Ltd.",
+        "text": "Designed and built websites, UI for robot Screens, Posters For the company"
+      },
+      {
+        "from": "2026",
+        "to": "Present",
+        "title": "Freelancer",
+        "company": "Self-employeed",
+        "text": "Designed & developed the Websites, apps and games"
+      }
+    ],
+    "education": [
+      {
+        "name": "Graduation",
+        "place": "Malla Reddy University",
+        "year": "2025"
+      },
+      {
+        "name": "Intermediate",
+        "place": "Sri Chaitanya",
+        "year": "2021"
+      }
+    ],
+    "certifications": []
+  },
+  "quote": {
+    "text": "Your idea deserves more than a good design. It deserves to be understood, used, and remembered.",
+    "highlights": [
+      "understood",
+      "used",
+      "remembered"
+    ],
+    "signature": "Product Designer"
+  },
+  "skills": {
+    "heading": "The skills behind the work.",
+    "groups": [
+      {
+        "title": "Design",
+        "items": [
+          "Product Design",
+          "UI Design",
+          "UX Design",
+          "User Research",
+          "Wireframing",
+          "Prototyping",
+          "Design Systems",
+          "Interaction Design",
+          "Usability Testing"
+        ]
+      },
+      {
+        "title": "Development",
+        "items": [
+          "Interactive Websites",
+          "Front-End Development",
+          "Responsive Design",
+          "Web Animation",
+          "AI-Assisted Development",
+          "Rapid Prototyping"
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "0": "F",
+        "1": "i",
+        "2": "g",
+        "3": "m",
+        "4": "a",
+        "name": "FIgma",
+        "icon": "/uploads/tool-mu5gcdhr.png"
+      },
+      {
+        "0": "F",
+        "1": "r",
+        "2": "a",
+        "3": "m",
+        "4": "e",
+        "5": "r",
+        "name": "Framer",
+        "icon": "/uploads/121121121-mu5ggavt.png"
+      },
+      {
+        "0": "I",
+        "1": "l",
+        "2": "l",
+        "3": "u",
+        "4": "s",
+        "5": "t",
+        "6": "r",
+        "7": "a",
+        "8": "t",
+        "9": "o",
+        "10": "r",
+        "name": "Illustrator",
+        "icon": "/uploads/islamabad-pakistan-oct-2023-adobe-applications-illustrator-vector-logos-981536-446-jpg-mu5ggk5t.avif"
+      },
+      {
+        "0": "C",
+        "1": "l",
+        "2": "a",
+        "3": "u",
+        "4": "d",
+        "5": "e",
+        "name": "Claude",
+        "icon": "/uploads/claude-logo-mu5ggrfx.png"
+      },
+      {
+        "0": "M",
+        "1": "i",
+        "2": "r",
+        "3": "o",
+        "name": "Antigravity",
+        "icon": "/uploads/242056456-mu5ggy86.png"
+      },
+      {
+        "0": "V",
+        "1": "e",
+        "2": "r",
+        "3": "c",
+        "4": "e",
+        "5": "l",
+        "name": "Vercel",
+        "icon": "/uploads/images-1-mu5hmb5u.png"
+      }
+    ]
+  },
+  "process": {
+    "heading": "A clear process, from first idea to final launch.",
+    "intro": "Every project follows a simple, transparent path, so you always know what's happening and what comes next.",
+    "steps": [
+      {
+        "title": "Discover",
+        "text": "I start by understanding your goals, your users, and the problem we're solving through conversations, research, and a close look at what already exists.",
+        "tags": [
+          "Project brief",
+          "User insights",
+          "Goals"
+        ]
+      },
+      {
+        "title": "Define",
+        "text": "I turn insights into structure by mapping user flows, organizing content, and sketching wireframes so we agree on direction before visual design begins.",
+        "tags": [
+          "User flows",
+          "Information architecture",
+          "Wireframes"
+        ]
+      },
+      {
+        "title": "Design",
+        "text": "I craft the interface with care: clean layouts, consistent components, and thoughtful details, then refine it with your feedback.",
+        "tags": [
+          "UI designs",
+          "Design system",
+          "Interactive prototype"
+        ]
+      },
+      {
+        "title": "Develop & Launch",
+        "text": "I build the design into a fast, responsive, interactive website, test it across devices, and launch it, with support after it goes live.",
+        "tags": [
+          "Live website",
+          "Responsive build",
+          "Launch support"
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "heading": "Kind words from people I've worked with.",
+    "items": [
+      {
+        "quote": "Working with Sai was effortless. He understood the brief quickly, asked the right questions, and delivered a website that felt exactly like us.",
+        "name": "Name",
+        "role": "Role",
+        "company": "Company",
+        "initials": "OYE"
+      },
+      {
+        "quote": "The attention to detail was remarkable, from the first wireframe to the final interaction. Our users noticed the difference immediately.",
+        "name": "Name",
+        "role": "Role",
+        "company": "Company",
+        "initials": "VEDYA"
+      },
+      {
+        "quote": "Fast, thoughtful, and genuinely collaborative. Sai turned a vague idea into a product people actually enjoy using.",
+        "name": "Name",
+        "role": "Role",
+        "company": "Company",
+        "initials": "MED"
+      }
+    ]
+  },
+  "work": {
+    "heading": "Selected projects, designed and built.",
+    "intro": "Brand websites, web apps, and interactive experiences, each one designed with care and built to feel as good as it looks.",
+    "projects": [
+      {
+        "projectType": "",
+        "duration": "[X weeks]",
+        "tools": [
+          "Figma",
+          "Next.js",
+          "Tailwind CSS",
+          "GSAP",
+          "Cursor",
+          "Vercel"
+        ],
+        "summary": "A luxury e-commerce experience for hand-embroidered Hyderabadi heritage wear, with an interactive fitting canvas for made-to-measure orders.",
+        "overview": "OYE is a bespoke fashion label built around ancestral zardozi embroidery, where every piece is drawn, framed, and stitched by hand by karigars. I designed and built its website to feel like stepping into an atelier: rich, unhurried, and personal, while still working as a smooth online store.",
+        "challenge": "Luxury handcraft is hard to sell online. Shoppers can't touch the fabric or meet the artisan, and standard S/M/L sizing goes against the idea of made-to-measure clothing. The site needed to tell the craft story, present collections beautifully, and make custom sizing simple enough to do at home.",
+        "approach": "I built the experience around three ideas: tell the craft story, show the pieces like an exhibition, and turn measuring into a guided, interactive step instead of a form.",
+        "outcome": "[Add outcome]",
+        "skillsShown": [
+          "Brand storytelling",
+          "Luxury e-commerce UX",
+          "Interactive feature design",
+          "Custom illustration",
+          "Simplifying complex real-world tasks"
+        ],
+        "features": [
+          {
+            "title": "Editorial Hero",
+            "text": "Large \"Timeless Grace\" typography framing a model cutout, with a slide carousel, pill menu, wishlist, and cart.",
+            "image": ""
+          },
+          {
+            "title": "Heritage Storytelling",
+            "text": "Artisan photography paired with the brand story, a signature quote, and key facts.",
+            "image": ""
+          },
+          {
+            "title": "Curated Collections",
+            "text": "Women's and Men's collections in arched frames with oversized background words for an exhibition feel.",
+            "image": ""
+          },
+          {
+            "title": "Custom Tailoring Studio",
+            "text": "A three-step explanation of made-to-measure: skip standard sizes, learn how to measure, save once for every order.",
+            "image": ""
+          },
+          {
+            "title": "Interactive Fitting Canvas",
+            "text": "Shoppers tap points on a mannequin (shoulder, chest, waist, hip, full length) to see exactly where to measure.",
+            "image": ""
+          },
+          {
+            "title": "Saved Measurements",
+            "text": "Profiles are stored in the browser, offered again at checkout, and can be switched on or off per order.",
+            "image": ""
+          }
+        ],
+        "designSystem": {
+          "colors": [
+            {
+              "name": "Espresso",
+              "hex": "#1C0D0B"
+            },
+            {
+              "name": "Cream",
+              "hex": "#FDF2DF"
+            },
+            {
+              "name": "Antique Gold",
+              "hex": "#C9A24A"
+            },
+            {
+              "name": "Heritage Red",
+              "hex": "#9E2A2B"
+            }
+          ],
+          "headingFont": "Elegant serif",
+          "bodyFont": "Clean sans-serif",
+          "notes": "Arched frames, wide letter-spaced labels, textile-inspired zigzag dividers, and generous spacing create a calm, premium, heritage feel."
+        },
+        "gallery": [],
+        "slug": "oye",
+        "title": "OYE",
+        "subtitle": "Own Your Edge",
+        "category": "E-commerce · Luxury Fashion",
+        "filters": [
+          "Websites",
+          "Brand"
+        ],
+        "year": "2025",
+        "tags": [
+          "UI/UX Design",
+          "Interactive Development",
+          "E-commerce Design"
+        ],
+        "url": "https://oye-nine.vercel.app",
+        "image": "/uploads/chatgpt-image-sep-17-2026-at-11-30-58-am-mu54nvz4.png",
+        "featured": true
+      },
+      {
+        "projectType": "",
+        "duration": "",
+        "tools": [],
+        "summary": "",
+        "overview": "",
+        "challenge": "",
+        "approach": "",
+        "outcome": "",
+        "skillsShown": [],
+        "features": [],
+        "designSystem": {
+          "colors": [],
+          "headingFont": "",
+          "bodyFont": "",
+          "notes": ""
+        },
+        "gallery": [],
+        "slug": "vedya",
+        "title": "Vedya",
+        "subtitle": "Accelerating AI Adoption",
+        "category": "Corporate Website · AI",
+        "filters": [
+          "Websites"
+        ],
+        "year": "2025",
+        "tags": [
+          "UX strategy",
+          "Web design"
+        ],
+        "url": "https://vedya-website-tan.vercel.app/",
+        "image": "/uploads/chatgpt-image-sep-17-2026-at-03-12-45-pm-mu5cd6zb.png",
+        "featured": true
+      },
+      {
+        "projectType": "",
+        "duration": "",
+        "tools": [],
+        "summary": "",
+        "overview": "",
+        "challenge": "",
+        "approach": "",
+        "outcome": "",
+        "skillsShown": [],
+        "features": [],
+        "designSystem": {
+          "colors": [],
+          "headingFont": "",
+          "bodyFont": "",
+          "notes": ""
+        },
+        "gallery": [],
+        "slug": "mediflow",
+        "title": "MediFlow",
+        "subtitle": "Healthcare Workflow Platform",
+        "category": "App · Healthcare",
+        "filters": [
+          "Product Design",
+          "Apps"
+        ],
+        "year": "2025",
+        "tags": [
+          "Product design",
+          "Design system"
+        ],
+        "url": "https://mediflow-khaki.vercel.app",
+        "image": "/uploads/chatgpt-image-sep-17-2026-at-12-24-19-pm-mu56csnt.png",
+        "featured": true
+      }
+    ]
+  },
+  "contact": {
+    "headline": "Have an idea? Let's build something people remember.",
+    "highlight": "remember",
+    "support": "I'm open to freelance projects, full-time roles, and creative collaborations."
+  }
+}
