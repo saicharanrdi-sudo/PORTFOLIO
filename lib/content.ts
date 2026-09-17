@@ -1,18 +1,16 @@
 import "server-only"
-import { promises as fs } from "node:fs"
-import path from "node:path"
 import type { Content } from "./content-types"
 import { normalizeProject, type Project } from "@/data/projects"
+import { readContentText, writeContentText } from "./storage"
+import seed from "@/content/site.json"
 
 /**
- * Content storage adapter. Everything the admin edits goes through here, so
- * swapping the JSON file for a database or blob store touches only this file.
+ * Content access. Storage (disk locally, Vercel Blob when deployed) is handled
+ * in lib/storage.ts; the JSON checked into the repo seeds a fresh store.
  */
-const FILE = path.join(process.cwd(), "content", "site.json")
-
 export async function getContent(): Promise<Content> {
-  const raw = await fs.readFile(FILE, "utf8")
-  const content = JSON.parse(raw) as Content
+  const raw = await readContentText()
+  const content = (raw ? JSON.parse(raw) : structuredClone(seed)) as Content
   content.work.projects = content.work.projects.map(normalizeProject)
   // Older content files stored tools as plain strings
   content.skills.tools = (content.skills.tools as unknown[]).map((t) =>
@@ -22,9 +20,7 @@ export async function getContent(): Promise<Content> {
 }
 
 export async function saveContent(content: Content): Promise<void> {
-  const tmp = `${FILE}.tmp`
-  await fs.writeFile(tmp, JSON.stringify(content, null, 2) + "\n", "utf8")
-  await fs.rename(tmp, FILE)
+  await writeContentText(JSON.stringify(content, null, 2) + "\n")
 }
 
 /* ------------------------------------------------------------------ */

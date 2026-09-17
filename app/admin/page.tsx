@@ -513,7 +513,7 @@ function ImageField({ field, value, onChange }: { field: Field; value: string; o
 }
 
 /** Uploaded files (PDFs) live under /uploads and can be deleted from the server. */
-const isUploaded = (url: string) => url.startsWith("/uploads/")
+const isUploaded = (url: string) => url.startsWith("/uploads/") || /\.public\.blob\.vercel-storage\.com\/uploads\//.test(url)
 
 function FileField({ field, value, onChange }: { field: Field; value: string; onChange: (v: string) => void }) {
   const inputRef = useRef<HTMLInputElement>(null)
