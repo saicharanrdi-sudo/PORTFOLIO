@@ -9,7 +9,9 @@ import path from "node:path"
  * - Vercel: the filesystem is read-only, so when a Blob store is connected
  *   (BLOB_READ_WRITE_TOKEN present) everything goes to Vercel Blob instead.
  */
-export const usingBlob = () => !!process.env.BLOB_READ_WRITE_TOKEN
+// Supports both old (BLOB_READ_WRITE_TOKEN) and new (BLOB_STORE_ID + OIDC) Vercel Blob auth
+export const usingBlob = () =>
+  !!process.env.BLOB_READ_WRITE_TOKEN || !!process.env.BLOB_STORE_ID
 
 const CONTENT_PATHNAME = "content/site.json"
 const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads")
@@ -25,8 +27,9 @@ export async function readContentText(): Promise<string | null> {
     const { head } = await import("@vercel/blob")
     try {
       const meta = await head(CONTENT_PATHNAME)
+      const fetchUrl = meta.url || meta.downloadUrl
       // Blob URLs sit behind a CDN; the query string defeats any stale copy
-      const res = await fetch(`${meta.url}?t=${Date.now()}`, { cache: "no-store" })
+      const res = await fetch(`${fetchUrl}${fetchUrl.includes("?") ? "&" : "?"}t=${Date.now()}`, { cache: "no-store" })
       if (!res.ok) return null
       return await res.text()
     } catch {
@@ -49,8 +52,17 @@ export async function writeContentText(text: string): Promise<void> {
       allowOverwrite: true,
       contentType: "application/json",
       cacheControlMaxAge: 60,
+      // storeId is needed for new OIDC-based Blob stores (BLOB_STORE_ID env var)
+      ...(process.env.BLOB_STORE_ID && !process.env.BLOB_READ_WRITE_TOKEN
+        ? { storeId: process.env.BLOB_STORE_ID }
+        : {}),
     })
     return
+  }
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "Cannot save changes: server filesystem is read-only in production. Please connect a Blob store (Storage → Blob) in your Vercel project dashboard to enable updates."
+    )
   }
   const tmp = `${CONTENT_FILE}.tmp`
   await fs.writeFile(tmp, text, "utf8")
@@ -65,7 +77,15 @@ export async function writeContentText(text: string): Promise<void> {
 export async function storeUpload(name: string, data: ArrayBuffer, contentType: string): Promise<string> {
   if (usingBlob()) {
     const { put } = await import("@vercel/blob")
-    const blob = await put(`uploads/${name}`, data, { access: "public", addRandomSuffix: false, contentType })
+    const blob = await put(`uploads/${name}`, data, {
+      access: "public",
+      addRandomSuffix: false,
+      contentType,
+      // storeId is needed for new OIDC-based Blob stores (BLOB_STORE_ID env var)
+      ...(process.env.BLOB_STORE_ID && !process.env.BLOB_READ_WRITE_TOKEN
+        ? { storeId: process.env.BLOB_STORE_ID }
+        : {}),
+    })
     return blob.url
   }
   await fs.mkdir(UPLOADS_DIR, { recursive: true })
