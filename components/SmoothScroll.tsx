@@ -29,6 +29,9 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       lerp: 0.075,
       wheelMultiplier: 0.9,
       touchMultiplier: 1.5,
+      // Drive touch scrolling through Lenis too, so phones get the same easing as desktop
+      syncTouch: true,
+      syncTouchLerp: 0.09,
       anchors: { offset: HASH_OFFSET },
     })
     setLenis(lenis)

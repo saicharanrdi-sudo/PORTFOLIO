@@ -57,6 +57,7 @@ export default function Work() {
     }
     const metaFade = [meta.category, meta.year, meta.counter, meta.visit]
     const bar = root.querySelector<HTMLElement>("[data-bar]")!
+    const hint = root.querySelector<HTMLElement>("[data-hint]")
 
     const mm = gsap.matchMedia()
 
@@ -173,6 +174,12 @@ export default function Work() {
         })
 
         bar.style.transform = `scaleX(${(p / (n - 1)).toFixed(4)})`
+        if (hint) {
+          // Visible on the first card, gone once the stack starts moving
+          const o = Math.max(0, 1 - p * 4)
+          hint.style.opacity = o.toFixed(3)
+          hint.style.transform = `translate(-50%, ${((1 - o) * 12).toFixed(1)}px)`
+        }
 
         const active = clamp(Math.round(p), 0, n - 1)
         if (active !== state.active) {
@@ -325,6 +332,18 @@ export default function Work() {
             Visit site&nbsp;↗
           </a>
         </div>
+      </div>
+
+      {/* Scroll hint */}
+      <div
+        data-hint
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2.5 text-[12px] font-medium tracking-[0.08em] text-muted uppercase will-change-[transform,opacity]"
+      >
+        Scroll
+        <span className="relative flex h-7 w-4 items-start justify-center rounded-full border border-line">
+          <span className="mt-1.5 block h-1.5 w-0.5 animate-scroll-dot rounded-full bg-primary" />
+        </span>
       </div>
 
       {/* Progress */}

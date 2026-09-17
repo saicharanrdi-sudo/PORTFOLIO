@@ -14,10 +14,28 @@
 
   --animate-marquee: marquee 48s linear infinite;
   --animate-pulse-soft: pulse-soft 2.4s ease-in-out infinite;
+  --animate-scroll-dot: scroll-dot 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 
   @keyframes marquee {
     to {
       transform: translateX(-50%);
+    }
+  }
+
+  @keyframes scroll-dot {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    25% {
+      opacity: 1;
+    }
+    75% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(10px);
+      opacity: 0;
     }
   }
 
@@ -80,7 +98,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
-  .animate-pulse-soft {
+  .animate-pulse-soft,
+  .animate-scroll-dot {
     animation: none;
   }
 }
