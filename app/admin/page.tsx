@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { SCHEMA, type Content, type Field } from "@/lib/content-types"
+import { uploadFile, deleteFile } from "@/components/admin/upload"
 
 export default function AdminPage() {
   const [content, setContent] = useState<Content | null>(null)
@@ -443,13 +444,8 @@ function ImageField({ field, value, onChange }: { field: Field; value: string; o
   const upload = async (file: File) => {
     setBusy(true)
     setError("")
-    const body = new FormData()
-    body.append("file", file)
     try {
-      const res = await fetch("/api/admin/upload", { method: "POST", body })
-      const data = (await res.json()) as { url?: string; error?: string }
-      if (!res.ok || !data.url) throw new Error(data.error || "Upload failed")
-      onChange(data.url)
+      onChange(await uploadFile(file))
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -523,17 +519,11 @@ function FileField({ field, value, onChange }: { field: Field; value: string; on
   const upload = async (file: File) => {
     setBusy("upload")
     setError("")
-    const body = new FormData()
-    body.append("file", file)
     try {
-      const res = await fetch("/api/admin/upload", { method: "POST", body })
-      const data = (await res.json()) as { url?: string; error?: string }
-      if (!res.ok || !data.url) throw new Error(data.error || "Upload failed")
-      // Replace: remove the previous uploaded file so it doesn't linger on disk
-      if (value && isUploaded(value) && value !== data.url) {
-        await fetch(`/api/admin/upload?url=${encodeURIComponent(value)}`, { method: "DELETE" }).catch(() => {})
-      }
-      onChange(data.url)
+      const url = await uploadFile(file)
+      // Replace: remove the previous uploaded file so it doesn't linger in storage
+      if (value && isUploaded(value) && value !== url) await deleteFile(value).catch(() => {})
+      onChange(url)
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -549,9 +539,7 @@ function FileField({ field, value, onChange }: { field: Field; value: string; on
       setBusy("delete")
       setError("")
       try {
-        const res = await fetch(`/api/admin/upload?url=${encodeURIComponent(value)}`, { method: "DELETE" })
-        const data = (await res.json()) as { error?: string }
-        if (!res.ok) throw new Error(data.error || "Delete failed")
+        await deleteFile(value)
       } catch (err: any) {
         setError(err.message)
         setBusy(null)
