@@ -7,11 +7,27 @@ import path from "node:path"
  *
  * - Local / any Node host: files on disk (content/site.json, public/uploads).
  * - Vercel: the filesystem is read-only, so when a Blob store is connected
- *   (BLOB_READ_WRITE_TOKEN present) everything goes to Vercel Blob instead.
+ *   (BLOB_READ_WRITE_TOKEN or BLOB_STORE_ID present) everything goes to Vercel Blob instead.
+ *
+ * The Blob store may be either public or private.
+ * - Old stores:  use BLOB_READ_WRITE_TOKEN, access: "public"
+ * - New stores:  use BLOB_STORE_ID + OIDC, access: "private"
  */
+
 // Supports both old (BLOB_READ_WRITE_TOKEN) and new (BLOB_STORE_ID + OIDC) Vercel Blob auth
 export const usingBlob = () =>
   !!process.env.BLOB_READ_WRITE_TOKEN || !!process.env.BLOB_STORE_ID
+
+// New OIDC-based private stores use BLOB_STORE_ID without BLOB_READ_WRITE_TOKEN
+const isPrivateStore = () =>
+  !!process.env.BLOB_STORE_ID && !process.env.BLOB_READ_WRITE_TOKEN
+
+/** Build the shared extra options for put/head/del when using the new OIDC store */
+function blobStoreOpts(): Record<string, unknown> {
+  return isPrivateStore() && process.env.BLOB_STORE_ID
+    ? { storeId: process.env.BLOB_STORE_ID }
+    : {}
+}
 
 const CONTENT_PATHNAME = "content/site.json"
 const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads")
@@ -24,14 +40,43 @@ const CONTENT_FILE = path.join(process.cwd(), "content", "site.json")
 /** Returns the stored JSON text, or null when nothing has been saved yet. */
 export async function readContentText(): Promise<string | null> {
   if (usingBlob()) {
-    const { head } = await import("@vercel/blob")
+    const { get, head } = await import("@vercel/blob")
     try {
-      const meta = await head(CONTENT_PATHNAME)
-      const fetchUrl = meta.url || meta.downloadUrl
-      // Blob URLs sit behind a CDN; the query string defeats any stale copy
-      const res = await fetch(`${fetchUrl}${fetchUrl.includes("?") ? "&" : "?"}t=${Date.now()}`, { cache: "no-store" })
-      if (!res.ok) return null
-      return await res.text()
+      if (isPrivateStore()) {
+        // Private blob: use get() which handles OIDC auth
+        const result = await get(CONTENT_PATHNAME, {
+          access: "private",
+          useCache: false,
+          ...blobStoreOpts(),
+        })
+        if (!result || result.statusCode !== 200 || !result.stream) return null
+        // Consume the stream into text
+        const reader = result.stream.getReader()
+        const chunks: Uint8Array[] = []
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          if (value) chunks.push(value)
+        }
+        return new TextDecoder().decode(
+          chunks.reduce((acc, chunk) => {
+            const merged = new Uint8Array(acc.length + chunk.length)
+            merged.set(acc)
+            merged.set(chunk, acc.length)
+            return merged
+          }, new Uint8Array(0))
+        )
+      } else {
+        // Public blob: fetch via CDN URL
+        const meta = await head(CONTENT_PATHNAME, blobStoreOpts())
+        const fetchUrl = meta.url || meta.downloadUrl
+        const res = await fetch(
+          `${fetchUrl}${fetchUrl.includes("?") ? "&" : "?"}t=${Date.now()}`,
+          { cache: "no-store" }
+        )
+        if (!res.ok) return null
+        return await res.text()
+      }
     } catch {
       return null
     }
@@ -47,15 +92,12 @@ export async function writeContentText(text: string): Promise<void> {
   if (usingBlob()) {
     const { put } = await import("@vercel/blob")
     await put(CONTENT_PATHNAME, text, {
-      access: "public",
+      access: isPrivateStore() ? "private" : "public",
       addRandomSuffix: false,
       allowOverwrite: true,
       contentType: "application/json",
       cacheControlMaxAge: 60,
-      // storeId is needed for new OIDC-based Blob stores (BLOB_STORE_ID env var)
-      ...(process.env.BLOB_STORE_ID && !process.env.BLOB_READ_WRITE_TOKEN
-        ? { storeId: process.env.BLOB_STORE_ID }
-        : {}),
+      ...blobStoreOpts(),
     })
     return
   }
@@ -78,13 +120,10 @@ export async function storeUpload(name: string, data: ArrayBuffer, contentType: 
   if (usingBlob()) {
     const { put } = await import("@vercel/blob")
     const blob = await put(`uploads/${name}`, data, {
-      access: "public",
+      access: isPrivateStore() ? "private" : "public",
       addRandomSuffix: false,
       contentType,
-      // storeId is needed for new OIDC-based Blob stores (BLOB_STORE_ID env var)
-      ...(process.env.BLOB_STORE_ID && !process.env.BLOB_READ_WRITE_TOKEN
-        ? { storeId: process.env.BLOB_STORE_ID }
-        : {}),
+      ...blobStoreOpts(),
     })
     return blob.url
   }
@@ -98,7 +137,11 @@ export function isUploadUrl(url: string): boolean {
   if (url.startsWith("/uploads/")) return !url.includes("..")
   try {
     const u = new URL(url)
-    return u.hostname.endsWith(".public.blob.vercel-storage.com") && u.pathname.startsWith("/uploads/")
+    return (
+      (u.hostname.endsWith(".public.blob.vercel-storage.com") ||
+        u.hostname.endsWith(".private.blob.vercel-storage.com")) &&
+      u.pathname.startsWith("/uploads/")
+    )
   } catch {
     return false
   }
@@ -108,7 +151,7 @@ export async function removeUpload(url: string): Promise<void> {
   if (!isUploadUrl(url)) throw new Error("Not an uploaded file.")
   if (url.startsWith("http")) {
     const { del } = await import("@vercel/blob")
-    await del(url)
+    await del(url, blobStoreOpts())
     return
   }
   const target = path.resolve(UPLOADS_DIR, url.slice("/uploads/".length))
