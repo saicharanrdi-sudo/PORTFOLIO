@@ -5,7 +5,7 @@ import gsap from "gsap"
 
 const VIDEO_SRC = "/opening.mp4"
 /** If the video never reports `ended` (stalled network, blocked autoplay), move on anyway. */
-const SAFETY_MS = 15000
+const SAFETY_MS = 6000
 
 type Props = {
   /** Fired the moment the curtain starts lifting — the hero begins its intro here. */

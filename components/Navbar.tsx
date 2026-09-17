@@ -24,10 +24,10 @@ export default function Navbar() {
           {site.name}
         </Link>
 
-        <ul className="flex items-center gap-6 text-[15px] md:gap-8">
+        <ul className="flex items-center gap-5 text-[15px] md:gap-8">
           {LINKS.map((link) => {
             const active = isActive(link.href)
-            const mobileHidden = link.label === "Home" || link.label === "About" || link.label === "Contact"
+            const mobileHidden = link.label === "About" || link.label === "Contact"
             return (
               <li key={link.href} className={mobileHidden ? "hidden md:block" : ""}>
                 <HashLink

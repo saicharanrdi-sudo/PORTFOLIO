@@ -13,9 +13,25 @@ import Process from "@/components/Process"
 import Testimonials from "@/components/Testimonials"
 import { lockScroll } from "@/lib/lenis"
 
+const SESSION_KEY = "preloader-shown"
+
 export default function Home() {
   const [loading, setLoading] = useState(true)
   const [revealed, setRevealed] = useState(false)
+
+  // The opening plays once per browser session; later visits go straight to the hero
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(SESSION_KEY)) {
+        setLoading(false)
+        setRevealed(true)
+        return
+      }
+      sessionStorage.setItem(SESSION_KEY, "1")
+    } catch {
+      // storage unavailable (private mode etc.): just play it
+    }
+  }, [])
 
   // Scroll stays locked until the preloader has fully lifted
   useEffect(() => {
