@@ -256,7 +256,7 @@ export default function Work() {
       </div>
 
       {/* Stage */}
-      <div className="absolute inset-0 z-10 [perspective:1400px] max-md:bottom-[26vh] max-md:top-[10vh]">
+      <div className="absolute inset-0 z-10 [perspective:1400px] max-md:bottom-[26vh] max-md:top-[10vh] md:top-[6vh] md:bottom-[26vh]">
         {PROJECTS.map((project) => (
           <div key={project.url} className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <a
@@ -266,7 +266,7 @@ export default function Work() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`View ${project.title.split(":")[0]} project`}
-              className="group relative block aspect-[16/10] w-[min(44vw,640px)] overflow-hidden rounded-[20px] bg-surface shadow-[0_24px_60px_-24px_rgba(17,17,17,0.18)] [transform-style:preserve-3d] [backface-visibility:hidden] will-change-[transform,opacity,filter] max-md:w-[78vw]"
+              className="group relative block aspect-[16/10] w-[min(40vw,560px)] overflow-hidden rounded-[20px] bg-surface shadow-[0_24px_60px_-24px_rgba(17,17,17,0.18)] [transform-style:preserve-3d] [backface-visibility:hidden] will-change-[transform,opacity,filter] max-md:w-[78vw]"
             >
               <div data-card-inner className="absolute inset-0 will-change-transform">
                 <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]">
@@ -295,13 +295,13 @@ export default function Work() {
 
       {/* Footer: title + meta */}
       <div className="absolute inset-x-0 bottom-0 z-20 flex flex-col gap-5 px-6 pb-10 md:flex-row md:items-end md:justify-between md:px-10 md:pb-14 lg:px-14">
-        <div className="grid max-w-[62vw] max-md:max-w-full">
+        <div className="grid max-w-[66vw] max-md:max-w-full">
           {PROJECTS.map((project, i) => (
             <h3
               key={project.url}
               data-title
               aria-hidden={i !== 0}
-              className="col-start-1 row-start-1 self-end text-[clamp(40px,6vw,96px)] leading-[1.02] font-medium tracking-[-0.03em] max-md:text-[32px]"
+              className="col-start-1 row-start-1 self-end text-[clamp(36px,4.4vw,72px)] leading-[1.02] font-medium tracking-[-0.03em] max-md:text-[32px]"
             >
               <Word className="mr-[0.25em] align-top text-[0.32em] leading-none text-primary" style={{ marginTop: "0.28em" }}>
                 {pad(i)}
