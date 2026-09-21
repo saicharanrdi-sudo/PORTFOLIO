@@ -18,6 +18,12 @@ import path from "node:path"
 export const usingBlob = () =>
   !!process.env.BLOB_READ_WRITE_TOKEN || !!process.env.BLOB_STORE_ID
 
+/** Browser-direct uploads need a read-write token; OIDC-only stores must go through the server. */
+export const clientUploadsAvailable = () => !!process.env.BLOB_READ_WRITE_TOKEN
+
+/** Public path the app serves blob uploads from (see app/api/files). */
+export const FILES_ROUTE = "/api/files/"
+
 // New OIDC-based private stores use BLOB_STORE_ID without BLOB_READ_WRITE_TOKEN
 const isPrivateStore = () =>
   !!process.env.BLOB_STORE_ID && !process.env.BLOB_READ_WRITE_TOKEN
@@ -119,21 +125,44 @@ export async function writeContentText(text: string): Promise<void> {
 export async function storeUpload(name: string, data: ArrayBuffer, contentType: string): Promise<string> {
   if (usingBlob()) {
     const { put } = await import("@vercel/blob")
-    const blob = await put(`uploads/${name}`, data, {
+    const pathname = `uploads/${name}`
+    await put(pathname, data, {
       access: isPrivateStore() ? "private" : "public",
       addRandomSuffix: false,
       contentType,
       ...blobStoreOpts(),
     })
-    return blob.url
+    // Served by the app so it works for private stores and never exposes the raw blob host
+    return `${FILES_ROUTE}${pathname}`
   }
   await fs.mkdir(UPLOADS_DIR, { recursive: true })
   await fs.writeFile(path.join(UPLOADS_DIR, name), Buffer.from(data))
   return `/uploads/${name}`
 }
 
+/** Streams a blob upload for the public file route. Returns null when not on Blob or not found. */
+export async function streamUpload(pathname: string): Promise<{ stream: ReadableStream; contentType: string; size: number | null } | null> {
+  if (!usingBlob()) return null
+  const { get } = await import("@vercel/blob")
+  try {
+    const result = await get(pathname, {
+      access: isPrivateStore() ? "private" : "public",
+      useCache: true,
+      ...blobStoreOpts(),
+    })
+    if (!result || result.statusCode !== 200 || !result.stream) return null
+    return { stream: result.stream, contentType: result.blob.contentType || "application/octet-stream", size: result.blob.size ?? null }
+  } catch {
+    return null
+  }
+}
+
+/** Blob pathname behind an app-served upload URL, or null. */
+const blobPathnameOf = (url: string) => (url.startsWith(FILES_ROUTE + "uploads/") && !url.includes("..") ? url.slice(FILES_ROUTE.length) : null)
+
 /** True when the URL points at something this app uploaded (and so may delete). */
 export function isUploadUrl(url: string): boolean {
+  if (blobPathnameOf(url)) return true
   if (url.startsWith("/uploads/")) return !url.includes("..")
   try {
     const u = new URL(url)
@@ -149,9 +178,10 @@ export function isUploadUrl(url: string): boolean {
 
 export async function removeUpload(url: string): Promise<void> {
   if (!isUploadUrl(url)) throw new Error("Not an uploaded file.")
-  if (url.startsWith("http")) {
+  const blobPath = blobPathnameOf(url)
+  if (blobPath || url.startsWith("http")) {
     const { del } = await import("@vercel/blob")
-    await del(url, blobStoreOpts())
+    await del(blobPath ?? url, blobStoreOpts())
     return
   }
   const target = path.resolve(UPLOADS_DIR, url.slice("/uploads/".length))

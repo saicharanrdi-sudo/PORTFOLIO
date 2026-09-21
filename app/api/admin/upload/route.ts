@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server"
 import path from "node:path"
-import { storeUpload, removeUpload, isUploadUrl, usingBlob } from "@/lib/storage"
+import { storeUpload, removeUpload, isUploadUrl, usingBlob, clientUploadsAvailable } from "@/lib/storage"
 
 const MAX_IMAGE = 8 * 1024 * 1024
 const MAX_FILE = 20 * 1024 * 1024
+/** Vercel functions reject request bodies over ~4.5 MB; server-side uploads there must stay under it. */
+const VERCEL_BODY_LIMIT = 4 * 1024 * 1024
+const serverLimit = (ext: string) => Math.min(ext === ".pdf" ? MAX_FILE : MAX_IMAGE, process.env.VERCEL ? VERCEL_BODY_LIMIT : Infinity)
 const TYPES: Record<string, string> = {
   "image/jpeg": ".jpg",
   "image/png": ".png",
@@ -24,9 +27,10 @@ const explain = (err: unknown) => {
   return err instanceof Error ? err.message : "Upload failed."
 }
 
-/** Tells the admin which upload path to use. */
+/** Tells the admin which upload path to use and the size it can accept. */
 export async function GET() {
-  return NextResponse.json({ mode: usingBlob() ? "blob" : "local" })
+  const mode = clientUploadsAvailable() ? "client" : "server"
+  return NextResponse.json({ mode, storage: usingBlob() ? "blob" : "local", maxBytes: mode === "client" ? MAX_FILE : serverLimit(".pdf") })
 }
 
 /**
@@ -38,7 +42,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     if (request.headers.get("content-type")?.includes("application/json")) {
-      if (!usingBlob()) return fail("Blob storage isn't configured on this server.", 400)
+      if (!clientUploadsAvailable()) return fail("Direct browser uploads need BLOB_READ_WRITE_TOKEN; use the server upload instead.", 400)
       const { handleUpload } = await import("@vercel/blob/client")
       const body = await request.json()
       const result = await handleUpload({
@@ -60,8 +64,8 @@ export async function POST(request: Request) {
     if (!(file instanceof File)) return fail("No file provided.", 400)
     const ext = TYPES[file.type]
     if (!ext) return fail("Unsupported file type.", 415)
-    const limit = ext === ".pdf" ? MAX_FILE : MAX_IMAGE
-    if (file.size > limit) return fail(`File must be under ${limit / 1024 / 1024} MB.`, 413)
+    const limit = serverLimit(ext)
+    if (file.size > limit) return fail(`File must be under ${Math.floor(limit / 1024 / 1024)} MB.`, 413)
 
     const url = await storeUpload(uploadName(file.name, ext), await file.arrayBuffer(), file.type)
     return NextResponse.json({ url })

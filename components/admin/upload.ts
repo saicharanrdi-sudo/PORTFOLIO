@@ -4,13 +4,17 @@
  * Uploads a file from the admin. On Vercel (Blob connected) the browser sends
  * the file straight to Blob storage; locally it posts to the server.
  */
-let modePromise: Promise<"blob" | "local"> | null = null
+type Mode = { mode: "client" | "server"; maxBytes: number }
+let modePromise: Promise<Mode> | null = null
 
 const getMode = () => {
   modePromise ??= fetch("/api/admin/upload")
-    .then((r) => (r.ok ? r.json() : { mode: "local" }))
-    .then((d: { mode?: string }) => (d.mode === "blob" ? "blob" : "local"))
-    .catch(() => "local" as const)
+    .then((r) => (r.ok ? r.json() : {}))
+    .then((d: { mode?: string; maxBytes?: number }) => ({
+      mode: d.mode === "client" ? ("client" as const) : ("server" as const),
+      maxBytes: d.maxBytes || 20 * 1024 * 1024,
+    }))
+    .catch(() => ({ mode: "server" as const, maxBytes: 4 * 1024 * 1024 }))
   return modePromise
 }
 
@@ -33,7 +37,11 @@ const safeName = (name: string) => {
 }
 
 export async function uploadFile(file: File): Promise<string> {
-  if ((await getMode()) === "blob") {
+  const { mode, maxBytes } = await getMode()
+  if (file.size > maxBytes) {
+    throw new Error(`File is ${(file.size / 1024 / 1024).toFixed(1)} MB; the limit here is ${Math.floor(maxBytes / 1024 / 1024)} MB. Try compressing it.`)
+  }
+  if (mode === "client") {
     const { upload } = await import("@vercel/blob/client")
     const blob = await upload(`uploads/${safeName(file.name)}`, file, {
       access: "public",

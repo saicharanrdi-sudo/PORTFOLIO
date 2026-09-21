@@ -454,6 +454,27 @@
         "url": "https://mediflow-khaki.vercel.app",
         "image": "/uploads/chatgpt-image-sep-17-2026-at-12-24-19-pm-mu56csnt.png",
         "featured": true
+      },
+      {
+        "slug": "Ganesh & Unlimited Modak",
+        "title": "Ganesh & unlimited Modak",
+        "subtitle": "A game that never ends",
+        "category": "Game, UIUX, Development",
+        "filters": [
+          "Productdesign",
+          "App",
+          "Game",
+          "AIAssistedDevelopment"
+        ],
+        "year": "2026",
+        "tags": [
+          "product Design",
+          "DesignSystem",
+          "UIUX"
+        ],
+        "url": "https://lordganesh-ochre.vercel.app",
+        "image": "/uploads/chatgpt-image-sep-18-2026-at-04-53-25-am-muat1gnk.png",
+        "featured": true
       }
     ]
   },
