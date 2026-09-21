@@ -7,6 +7,7 @@ import { uploadFile, deleteFile } from "@/components/admin/upload"
 export default function AdminPage() {
   const [content, setContent] = useState<Content | null>(null)
   const [initialContent, setInitialContent] = useState<Content | null>(null)
+  const [storageInfo, setStorageInfo] = useState<{ usingBlob: boolean; isReadOnly: boolean } | null>(null)
   const [activeSection, setActiveSection] = useState<keyof Content>("site")
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -14,14 +15,19 @@ export default function AdminPage() {
   const [statusMessage, setStatusMessage] = useState("")
 
   useEffect(() => {
-    fetch("/api/admin/content")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load content")
-        return res.json()
+    fetch(`/api/admin/content?t=${Date.now()}`, { cache: "no-store" })
+      .then(async (res) => {
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok) throw new Error(data.error || "Failed to load content")
+        return data
       })
-      .then((data: Content) => {
-        setContent(data)
-        setInitialContent(JSON.parse(JSON.stringify(data)))
+      .then((data: any) => {
+        const contentData = (data.content ?? data) as Content
+        setContent(contentData)
+        setInitialContent(JSON.parse(JSON.stringify(contentData)))
+        if (data.storage) {
+          setStorageInfo(data.storage)
+        }
         setLoading(false)
       })
       .catch((err) => {
@@ -35,20 +41,24 @@ export default function AdminPage() {
     if (!content) return
     setSaving(true)
     setSaveStatus("idle")
+    setStatusMessage("")
     try {
       const res = await fetch("/api/admin/content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(content),
       })
-      if (!res.ok) throw new Error("Failed to save")
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        throw new Error(data.error || `Failed to save (HTTP ${res.status})`)
+      }
       setInitialContent(JSON.parse(JSON.stringify(content)))
       setSaveStatus("success")
       setStatusMessage("Changes saved successfully!")
-      setTimeout(() => setSaveStatus("idle"), 3500)
+      setTimeout(() => setSaveStatus("idle"), 4000)
     } catch (err: any) {
       setSaveStatus("error")
-      setStatusMessage("Failed to save changes: " + err.message)
+      setStatusMessage(err.message || "Failed to save changes")
     } finally {
       setSaving(false)
     }
@@ -100,6 +110,40 @@ export default function AdminPage() {
 
   return (
     <div className="space-y-6">
+      {/* Storage Read-Only Warning Banner */}
+      {storageInfo?.isReadOnly && (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-900 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-start sm:items-center gap-2.5">
+            <span className="text-base">⚠️</span>
+            <div>
+              <p className="font-semibold">Storage is Read-Only on Vercel</p>
+              <p className="text-amber-800 text-[11px] mt-0.5">
+                Vercel serverless filesystem is read-only in production. Connect a Blob store in your Vercel project settings (Storage → Blob) to enable saving changes and file uploads.
+              </p>
+            </div>
+          </div>
+          <a
+            href="https://vercel.com/dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center justify-center rounded-full bg-amber-900 px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-amber-950 transition-colors"
+          >
+            Open Vercel Storage ↗
+          </a>
+        </div>
+      )}
+
+      {/* Save Error Alert */}
+      {saveStatus === "error" && (
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-xs text-red-800 shadow-xs flex items-start gap-2.5 animate-fade-in">
+          <span className="text-base">❌</span>
+          <div>
+            <p className="font-semibold">Unable to Save Changes</p>
+            <p className="mt-0.5 text-[11px] leading-relaxed text-red-700">{statusMessage}</p>
+          </div>
+        </div>
+      )}
+
       {/* Action Bar */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-[#e6e4df] bg-white p-5 shadow-sm">
         <div>
@@ -114,11 +158,6 @@ export default function AdminPage() {
           {saveStatus === "success" && (
             <span className="text-xs font-medium text-emerald-600 animate-fade-in flex items-center gap-1.5 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
               <span className="size-1.5 rounded-full bg-emerald-500" />
-              {statusMessage}
-            </span>
-          )}
-          {saveStatus === "error" && (
-            <span className="text-xs font-medium text-red-600 bg-red-50 px-3 py-1.5 rounded-full border border-red-200">
               {statusMessage}
             </span>
           )}
