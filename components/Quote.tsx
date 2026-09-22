@@ -60,7 +60,7 @@ export default function Quote() {
             pin: true,
             scrub: 0.6,
             anticipatePin: 1,
-            refreshPriority: 3,
+            refreshPriority: 2,
           },
         })
 

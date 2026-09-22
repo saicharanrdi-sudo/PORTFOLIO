@@ -45,10 +45,10 @@ export default function Home() {
       <main>
         <Hero play={revealed} />
         <About />
-        <Experience />
-        <Quote />
         <Work />
         <MoreWork />
+        <Quote />
+        <Experience />
         <Skills />
         <Process />
         <Testimonials />

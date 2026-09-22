@@ -84,7 +84,7 @@ export default function Work() {
           pin: true,
           scrub: 1.2,
           anticipatePin: 1,
-          refreshPriority: 2,
+          refreshPriority: 3,
           onUpdate: (self) => {
             state.vel = self.getVelocity()
           },
