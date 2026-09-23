@@ -277,7 +277,7 @@ export default function Contact() {
       </div>
 
       {/* Giant name, cropped at the bottom edge */}
-      <div data-name aria-hidden="true" className="relative z-10 overflow-hidden">
+      <div data-name aria-hidden="true" className="relative z-10 overflow-hidden pb-[84px]">
         <div
           ref={nameRef}
           className="flex w-max leading-none font-semibold tracking-[-0.05em] whitespace-nowrap text-ink select-none"

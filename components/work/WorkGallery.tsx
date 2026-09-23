@@ -146,7 +146,7 @@ export default function WorkGallery() {
   )
 
   return (
-    <main ref={rootRef} className="bg-bg pt-[72px]">
+    <main ref={rootRef} className="bg-bg">
       {/* Header */}
       <section className="px-6 pt-20 pb-16 md:px-10 md:pt-28 lg:px-14 lg:pb-20" aria-labelledby="work-title">
         <p data-intro className="mb-6 flex items-center gap-3 text-[13px] font-medium tracking-[0.08em] uppercase">
@@ -226,7 +226,7 @@ export default function WorkGallery() {
       <div
         data-pill
         aria-hidden="true"
-        className="pointer-events-none fixed bottom-6 left-1/2 z-30 flex items-center gap-3 rounded-full border border-line bg-bg/95 py-2.5 pr-4 pl-4 text-[13px] font-medium tabular-nums will-change-[transform,opacity]"
+        className="pointer-events-none fixed bottom-24 left-1/2 z-30 flex items-center gap-3 rounded-full border border-line bg-bg/95 py-2.5 pr-4 pl-4 text-[13px] font-medium tabular-nums will-change-[transform,opacity]"
       >
         <span>
           <span ref={counterRef} className="text-primary">

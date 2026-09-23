@@ -77,7 +77,7 @@ export default function Hero({ play }: Props) {
         </div>
 
 
-      <div className="relative z-10 flex flex-1 items-center px-6 pt-[104px] pb-16 md:px-10 lg:px-14">
+      <div className="relative z-10 flex flex-1 items-center px-6 py-16 md:px-10 lg:px-14">
         <div className="grid w-full grid-cols-12 gap-x-6">
           <div className="col-span-12 xl:col-span-11">
             <p
@@ -126,7 +126,7 @@ export default function Hero({ play }: Props) {
 
       </div>
 
-      <div className="border-t border-line">
+      <div className="border-t border-line pb-[84px]">
         <Marquee />
       </div>
     </section>

@@ -1,7 +1,7 @@
 export default function ProjectLoading() {
   const bar = "animate-pulse rounded-full bg-surface"
   return (
-    <main aria-busy="true" className="bg-bg px-6 pt-[72px] md:px-10 lg:px-14">
+    <main aria-busy="true" className="bg-bg px-6 md:px-10 lg:px-14">
       <div className="pt-16 md:pt-24">
         <div className={`${bar} h-4 w-24`} />
         <div className={`${bar} mt-8 h-[clamp(56px,10vw,160px)] w-3/4`} />

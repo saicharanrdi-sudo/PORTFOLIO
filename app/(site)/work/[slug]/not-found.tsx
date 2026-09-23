@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function ProjectNotFound() {
   return (
-    <main className="flex min-h-svh flex-col items-start justify-center bg-bg px-6 pt-[72px] md:px-10 lg:px-14">
+    <main className="flex min-h-svh flex-col items-start justify-center bg-bg px-6 md:px-10 lg:px-14">
       <p className="mb-6 flex items-center gap-3 text-[13px] font-medium tracking-[0.08em] uppercase">
         <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
         404

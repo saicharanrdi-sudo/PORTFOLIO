@@ -180,7 +180,7 @@ export default function ProjectDetail({ project, prev, next }: Props) {
   )
 
   return (
-    <main ref={rootRef} className="bg-bg pt-[72px]">
+    <main ref={rootRef} className="bg-bg">
       {/* 1. Header */}
       <header className="px-6 pt-12 md:px-10 md:pt-16 lg:px-14">
         <div className="flex items-center justify-between gap-6 text-[14px]">
