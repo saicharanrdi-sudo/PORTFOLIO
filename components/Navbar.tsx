@@ -69,10 +69,12 @@ export default function Navbar() {
         onMouseLeave={release}
         onFocusCapture={open}
         onBlurCapture={release}
-        className="pointer-events-auto flex max-w-full items-center overflow-hidden rounded-full bg-primary py-3 pr-7 pl-7 text-white shadow-[0_18px_56px_-18px_rgba(255,91,31,0.55)] md:pr-8 md:pl-8"
+        className="pointer-events-auto flex max-w-full items-center overflow-hidden rounded-full bg-primary py-3 pr-5 pl-5 text-white shadow-[0_18px_56px_-18px_rgba(255,91,31,0.55)] md:pr-8 md:pl-8"
       >
         <Link href="/" className="shrink-0 text-[15px] font-medium tracking-tight whitespace-nowrap">
-          {site.name}
+          {/* Only the smallest screens drop to the first name */}
+          <span className="min-[375px]:hidden">{site.name.split(" ")[0]}</span>
+          <span className="hidden min-[375px]:inline">{site.name}</span>
         </Link>
 
         {/* Collapses to zero width on the way down, springs back open on the way up */}
@@ -82,7 +84,7 @@ export default function Navbar() {
           }`}
         >
           <div className="overflow-hidden">
-            <ul className="flex shrink-0 items-center gap-6 pl-6 text-[15px] md:gap-8 md:pl-8">
+            <ul className="flex shrink-0 items-center gap-4 pl-4 text-[15px] sm:gap-6 sm:pl-6 md:gap-8 md:pl-8">
               {LINKS.map((link) => {
                 const active = isActive(link.href)
                 const mobileHidden = link.label === "About" || link.label === "Contact"
@@ -106,9 +108,11 @@ export default function Navbar() {
                     href={site.resumeUrl}
                     download={`${site.name.replace(/\s+/g, "-")}-Resume.pdf`}
                     tabIndex={collapsed ? -1 : undefined}
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/70 px-4 py-2 text-[14px] font-medium whitespace-nowrap transition-colors duration-300 hover:bg-white hover:text-primary motion-reduce:transition-none"
+                    aria-label="Download resume"
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/70 px-3 py-2 text-[14px] font-medium whitespace-nowrap transition-colors duration-300 hover:bg-white hover:text-primary sm:px-4 motion-reduce:transition-none"
                   >
-                    Resume <span aria-hidden="true">↓</span>
+                    <span className="hidden sm:inline">Resume</span>
+                    <span aria-hidden="true">↓</span>
                   </a>
                 </li>
               )}
