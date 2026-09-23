@@ -69,8 +69,7 @@ export default function Navbar() {
         onMouseLeave={release}
         onFocusCapture={open}
         onBlurCapture={release}
-        className="pointer-events-auto flex max-w-full items-center gap-6 overflow-hidden rounded-full border border-line/70 bg-bg/85 py-3 pl-7 shadow-[0_18px_56px_-18px_rgba(17,17,17,0.28)] backdrop-blur-md transition-[padding] duration-500 ease-out md:gap-8 md:pl-8 motion-reduce:transition-none"
-        style={{ paddingRight: collapsed ? "1.75rem" : undefined }}
+        className="pointer-events-auto flex max-w-full items-center overflow-hidden rounded-full bg-primary py-3 pr-7 pl-7 text-white shadow-[0_18px_56px_-18px_rgba(255,91,31,0.55)] md:pr-8 md:pl-8"
       >
         <Link href="/" className="shrink-0 text-[15px] font-medium tracking-tight whitespace-nowrap">
           {site.name}
@@ -83,7 +82,7 @@ export default function Navbar() {
           }`}
         >
           <div className="overflow-hidden">
-            <ul className="flex shrink-0 items-center gap-6 pr-7 text-[15px] md:gap-8 md:pr-8">
+            <ul className="flex shrink-0 items-center gap-6 pl-6 text-[15px] md:gap-8 md:pl-8">
               {LINKS.map((link) => {
                 const active = isActive(link.href)
                 const mobileHidden = link.label === "About" || link.label === "Contact"
@@ -95,7 +94,7 @@ export default function Navbar() {
                       aria-current={active ? "page" : undefined}
                       className="relative inline-flex shrink-0 items-center gap-2 py-1 whitespace-nowrap after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:origin-left hover:after:scale-x-100 motion-reduce:after:transition-none"
                     >
-                      {active && <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />}
+                      {active && <span aria-hidden="true" className="size-1.5 rounded-full bg-white" />}
                       {link.label}
                     </HashLink>
                   </li>
@@ -107,7 +106,7 @@ export default function Navbar() {
                     href={site.resumeUrl}
                     download={`${site.name.replace(/\s+/g, "-")}-Resume.pdf`}
                     tabIndex={collapsed ? -1 : undefined}
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ink px-4 py-2 text-[14px] font-medium whitespace-nowrap transition-colors duration-300 hover:bg-ink hover:text-white motion-reduce:transition-none"
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/70 px-4 py-2 text-[14px] font-medium whitespace-nowrap transition-colors duration-300 hover:bg-white hover:text-primary motion-reduce:transition-none"
                   >
                     Resume <span aria-hidden="true">↓</span>
                   </a>
